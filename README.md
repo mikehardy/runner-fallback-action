@@ -1,7 +1,7 @@
 # Github Runner Fallback Action
 
 <p align="center">
-  <a href="https://github.com/jimmygchen/runner-fallback-action/actions"><img alt="javscript-action status" src="https://github.com/jimmygchen/runner-fallback-action/workflows/units-test/badge.svg"></a>
+  <a href="https://github.com/mikehardy/runner-fallback-action/actions"><img alt="javscript-action status" src="https://github.com/mikehardy/runner-fallback-action/workflows/units-test/badge.svg"></a>
 </p>
 
 Github action to determine the availability of self-hosted runners, and fallback to a GitHub runner if the primary runners are offline.
@@ -10,11 +10,9 @@ This action uses [GitHub API](https://docs.github.com/en/rest/actions/self-hoste
 
 The API used requires an access token with org admin rights, for example a classic Personal Access Token with org:admin scope selected.
 
-This output can then used on the `runs-on` property of subsequent jobs. 
+This output can then used on the `runs-on` property of subsequent jobs.
 
 Note: In order to support an array of labels for the `runs-on` field, the output is formatted as a JSON string and needs to be parsed using `fromJson`. See example usage below.
-
-
 
 ## Usage
 
@@ -28,8 +26,8 @@ Note: In order to support an array of labels for the `runs-on` field, the output
 |  `primary-runner` | A comma separated list of labels for the _primary_ runner (e.g. 'self-hosted,linux').                      |
 | `fallback-runner` | A comma separated list of labels for the _fallback_ runner (e.g. 'self-hosted,linux').                     |
 
-
 #### Optional
+
 ---
 
 There are three ways runners can be allowed to run against a repo: User, Organization, Enterprise. The following options allow you to switch the implementation to use one of the other specified levels. **_Note:_** You can only provide one of the values.
@@ -55,10 +53,8 @@ github token is unavailable or expires. Default is false.
 | ------------------- | ----------------------------------------------- |
 | `fallback-on-error` | use the fallback runner if there are any errors |
 
-
-
-
 ### Example
+
 ```yaml
 jobs:
   # Job to 
@@ -71,11 +67,17 @@ jobs:
         id: set-runner
         uses: jimmygchen/runner-fallback-action@v1
         with:
+          # list of tags a runner must match to be considered a primary
           primary-runner: "self-hosted,linux"
+          # a single tag that will select a runner to fallback to
           fallback-runner: "ubuntu-latest"
+          # Must have org:admin permissions, github runner APIs require it
+          # Note that Actions secrets and Dependabot secrets are separate
           github-token: ${{ secrets.YOUR_GITHUB_TOKEN }}
+          # optional, fallback if fewer available, big batch jobs perhaps
           primaries-required: 1
-          fallback-on-error: false
+          # optional, fallback if token expires or github API fails
+          fallback-on-error: false 
 
   another-job:
     needs: determine-runner
@@ -85,4 +87,14 @@ jobs:
         run: echo "Doing something on ${{ needs.determine-runner.outputs.runner }}"
 ```
 
-Credit: this action is based on the pattern described by @ianpurton on [this feature request thread](https://github.com/orgs/community/discussions/20019#discussioncomment-5414593).
+- Here is an example of the action in use directly: https://github.com/ankidroid/Anki-Android-Backend/blob/main/.github/workflows/build-release.yml
+
+- Here is an example where the runner is used in a second preparation step that builds a dynamic job matrix where the runner is used in javascript: https://github.com/ankidroid/Anki-Android-Backend/blob/main/.github/workflows/build-quick.yml
+
+## Credit
+
+- this action is based on the pattern described by @ianpurton on [this feature request thread](https://github.com/orgs/community/discussions/20019#discussioncomment-5414593).
+
+- this action was originally developed by @jimmygchen - thanks Jimmy! [He has decided to archive his original action](https://github.com/jimmygchen/runner-fallback-action/pull/31#issuecomment-3454512133), and this fork is the successor
+
+- @O-Mutt contributed the organization-level and enterprise-level self-hosted runner feature, thanks Matt!
