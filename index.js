@@ -98,7 +98,7 @@ async function main() {
         return;
       } else {
         core.warning('Checking for available runners failed, but fallback-on-error is true');
-        core.warning(`Error: ${error}`);
+        core.warning(`Original error: ${error}`);
         core.warning(`using runner: ${fallbackRunner}`);
         core.setOutput('use-runner', [fallbackRunner] );
         return;
@@ -115,7 +115,7 @@ async function main() {
       core.setFailed(error);
     } else {
       core.warning('Checking for available runners failed, but fallback-on-error is true');
-      core.warning(`Error: ${error}`);
+      core.warning(`Original error: ${error}`);
       core.warning(`using runner: ${fallbackRunner}`);
       core.setOutput('use-runner', [fallbackRunner]);
     }
