@@ -100,7 +100,7 @@ async function main() {
         core.warning('Checking for available runners failed, but fallback-on-error is true');
         core.warning(`Error: ${error}`);
         core.warning(`using runner: ${fallbackRunner}`);
-        core.setOutput('use-runner', fallbackRunner);
+        core.setOutput('use-runner', [fallbackRunner] );
         return;
       }
     }
@@ -117,7 +117,7 @@ async function main() {
       core.warning('Checking for available runners failed, but fallback-on-error is true');
       core.warning(`Error: ${error}`);
       core.warning(`using runner: ${fallbackRunner}`);
-      core.setOutput('use-runner', fallbackRunner);
+      core.setOutput('use-runner', [fallbackRunner]);
     }
   }
 }
