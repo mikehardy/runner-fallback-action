@@ -93,8 +93,8 @@ jobs:
 
 ## Credit
 
-- this action is based on the pattern described by @ianpurton on [this feature request thread](https://github.com/orgs/community/discussions/20019#discussioncomment-5414593).
+- This action is based on the pattern described by [@ianpurton](https://github.com/ianpurton) on [this feature request thread](https://github.com/orgs/community/discussions/20019#discussioncomment-5414593).
 
-- this action was originally developed by @jimmygchen - thanks Jimmy! [He has decided to archive his original action](https://github.com/jimmygchen/runner-fallback-action/pull/31#issuecomment-3454512133), and this fork is the successor
+- This action was originally developed by [@jimmygchen](https://github.com/jimmychen) - thanks Jimmy! [He has decided to archive his original action](https://github.com/jimmygchen/runner-fallback-action/pull/31#issuecomment-3454512133), and this fork is the successor
 
-- @O-Mutt contributed the organization-level and enterprise-level self-hosted runner feature, thanks Matt!
+- [@O-Mutt](https://github.com/o-mutt) contributed the organization-level and enterprise-level self-hosted runner feature, thanks Matt!
