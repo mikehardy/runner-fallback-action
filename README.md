@@ -97,4 +97,4 @@ jobs:
 
 - This action was originally developed by [@jimmygchen](https://github.com/jimmychen) - thanks Jimmy! [He has decided to archive his original action](https://github.com/jimmygchen/runner-fallback-action/pull/31#issuecomment-3454512133), and this fork is the successor
 
-- [@O-Mutt](https://github.com/o-mutt) contributed the organization-level and enterprise-level self-hosted runner feature, thanks Matt!
+- [@O-Mutt](https://github.com/o-mutt) contributed the [organization-level and enterprise-level self-hosted runner feature](https://github.com/jimmygchen/runner-fallback-action/pull/28), thanks Matt!
