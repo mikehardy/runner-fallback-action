@@ -57,27 +57,38 @@ github token is unavailable or expires. Default is false.
 
 ```yaml
 jobs:
-  # Job to 
+  # We may have a self-hosted runner available. Use it if so.
   determine-runner:
     runs-on: ubuntu-latest
+    concurrency:
+      # Runner choice must happen serially for the "primaries-required" logic
+      # to be up to date in the context of one self-hosted runner that may be
+      # used for multiple workflows triggered off the same workflow event
+      group: runner-determination
+      cancel-in-progress: false
     outputs:
       runner: ${{ steps.set-runner.outputs.use-runner }}
     steps:
-      - name: Determine which runner to use
+      - name: Wait for possible parallel workflow run job startup lag
+        # After runner choice, the job that will use it has unavoidable job startup lag
+        # Wait for that job start / runner state change before we choose the runner for this run
+        run: sleep 15
+      - name: Use self-hosted runner if online and not busy, otherwise public runner
         id: set-runner
-        uses: jimmygchen/runner-fallback-action@v1
+        uses: mikehardy/runner-fallback-action@v1
         with:
+          organization: "ankidroid"
           # list of tags a runner must match to be considered a primary
-          primary-runner: "self-hosted,linux"
+          primary-runner: "macos-selfhosted"
           # a single tag that will select a runner to fallback to
-          fallback-runner: "ubuntu-latest"
-          # Must have org:admin permissions, github runner APIs require it
-          # Note that Actions secrets and Dependabot secrets are separate
-          github-token: ${{ secrets.YOUR_GITHUB_TOKEN }}
-          # optional, fallback if fewer available, big batch jobs perhaps
+          fallback-runner: "macos-26"
+          # optional, fallback if fewer available, big batch jobs or multiple workflows perhaps
           primaries-required: 1
           # optional, fallback if token expires or github API fails
-          fallback-on-error: false 
+          fallback-on-error: true
+          # Must have org:admin permissions, github runner APIs require it
+          # Note that Actions secrets and Dependabot secrets are separate
+          github-token: ${{ secrets.MIKE_HARDY_ORG_ADMIN_KEY }}
 
   another-job:
     needs: determine-runner
@@ -87,9 +98,9 @@ jobs:
         run: echo "Doing something on ${{ needs.determine-runner.outputs.runner }}"
 ```
 
-- Here is an example of the action in use directly: https://github.com/ankidroid/Anki-Android-Backend/blob/main/.github/workflows/build-release.yml
+- Here is an example of the action in use directly: <https://github.com/ankidroid/Anki-Android-Backend/blob/main/.github/workflows/build-release.yml>
 
-- Here is an example where the runner is used in a second preparation step that builds a dynamic job matrix where the runner is used in javascript: https://github.com/ankidroid/Anki-Android-Backend/blob/main/.github/workflows/build-quick.yml
+- Here is an example where the runner is used in a second preparation step that builds a dynamic job matrix where the runner is used in javascript: <https://github.com/ankidroid/Anki-Android-Backend/blob/main/.github/workflows/build-quick.yml>
 
 ## Credit
 
