@@ -106,6 +106,8 @@ async function main() {
         core.warning('Checking for available runners failed, but fallback-on-error is true');
         core.warning(`Original error: ${error}`);
         core.warning(`using runner: ${fallbackRunner}`);
+        core.summary.addRaw(`Selected runner ${fallbackRunner}. Check log for details.`);
+        core.summary.write();
         core.setOutput('use-runner', [fallbackRunner] );
         return;
       }
@@ -114,7 +116,8 @@ async function main() {
     core.info(`Primary runner is online: ${primaryIsOnline}`);
     core.info(`Sufficient primary runners available: ${sufficientPrimaries}`);
     core.info(`Using runner: ${useRunner}`);
-
+    core.summary.addRaw(`Selected runner ${useRunner}. Check log for details.`);
+    core.summary.write();
     core.setOutput('use-runner', useRunner);
   } catch (error) {
     if (fallbackRunner === undefined || fallbackOnError !== true) {
@@ -123,6 +126,8 @@ async function main() {
       core.warning('Checking for available runners failed, but fallback-on-error is true');
       core.warning(`Original error: ${error}`);
       core.warning(`using runner: ${fallbackRunner}`);
+      core.summary.addRaw(`Selected runner ${fallbackRunner}. Check log for details.`);
+      core.summary.write();
       core.setOutput('use-runner', [fallbackRunner]);
     }
   }
